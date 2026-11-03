@@ -11,7 +11,7 @@ Il s’agit d’une application web indépendante en HTML, CSS et JavaScript. Ce
 Prérequis : Node.js **22.9 ou plus récent**. Aucun paquet npm n’est nécessaire pour exécuter l’application.
 
 ```bash
-git clone https://github.com/samdedi24/maison-plus.git
+git clone https://github.com/samdedi24/Maison-.git maison-plus
 cd maison-plus
 npm start
 ```
