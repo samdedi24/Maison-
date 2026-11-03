@@ -1,0 +1,823 @@
+/* Apple Maison-inspired home: smoked capsules on a softly coloured wallpaper. */
+body.home-screen {
+  color: #fff;
+  background-color: #4d536d;
+  background-image:
+    radial-gradient(ellipse at 110% -10%, #3d806c 0%, transparent 56%),
+    radial-gradient(ellipse at -25% 5%, #50458b 0%, transparent 60%),
+    radial-gradient(ellipse at 10% 100%, #8c7387 0%, transparent 65%),
+    linear-gradient(135deg, #303b51, #647c89);
+  background-attachment: fixed;
+}
+.home-screen .sidebar {
+  background: #22263938;
+  border-color: #ffffff12;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+.home-screen .brand {
+  color: #fff;
+}
+.home-screen .brand-icon {
+  background: #ffffff15;
+  color: #f5c15c;
+}
+.home-screen .plus {
+  color: #f5c15c;
+}
+.home-screen .house-label,
+.home-screen .profile {
+  color: #fff;
+}
+.home-screen .house-label small,
+.home-screen .profile small,
+.home-screen .chevron {
+  color: #ffffff80;
+}
+.home-screen .home-avatar {
+  background: #ffffff12;
+  color: #fff;
+}
+.home-screen .nav-link {
+  color: #ffffffad;
+}
+.home-screen .nav-link:hover {
+  background: #ffffff0f;
+}
+.home-screen .nav-link.active {
+  color: #ffd56f;
+  background: #ffffff16;
+  border-color: #ffffff12;
+  box-shadow: none;
+}
+.home-screen .nav-link.active .nav-symbol {
+  color: #ffd063;
+}
+.home-screen .nav-link .badge {
+  color: #ffffff80;
+  border-color: #ffffff20;
+}
+.home-screen .settings,
+.home-screen .connection {
+  color: #ffffffb0;
+}
+.home-screen .connection,
+.home-screen .profile {
+  border-color: #ffffff15;
+}
+.home-screen .connection span {
+  color: #ffffff60;
+}
+.home-screen .avatar {
+  background: #ffffff19;
+  color: #eed6ad;
+}
+.home-screen .topbar {
+  color: #ffffff8f;
+  border-color: #ffffff10;
+}
+.home-screen .topbar b {
+  color: #ffffff45;
+}
+.home-screen .topbar .icon-button {
+  color: #ffffffc0;
+}
+.home-screen .topbar .icon-button:hover {
+  background: #ffffff15;
+}
+.home-screen main {
+  padding-top: 42px;
+}
+.home-screen .page-head {
+  margin-bottom: 25px;
+}
+.home-screen .page-head .eyebrow,
+.home-screen .page-head .subtitle {
+  display: none;
+}
+.home-screen h1 {
+  color: #fff;
+  font-size: 38px;
+  font-weight: 650;
+  letter-spacing: -1.1px;
+}
+.home-screen .date,
+.home-screen .date b {
+  color: #ffffff90;
+}
+.home-screen .summary-grid {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  gap: 10px;
+  margin-bottom: 32px;
+  padding: 2px 1px;
+}
+.home-screen .summary-grid::-webkit-scrollbar {
+  display: none;
+}
+.home-screen .summary-grid .summary {
+  min-width: 0;
+  flex: 0 0 auto;
+  gap: 9px;
+  padding: 11px 17px;
+  border-radius: 999px;
+  border-color: transparent;
+  background: #1e243a5e;
+  box-shadow: none;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.home-screen .summary-grid .summary .symbol {
+  height: 29px;
+  width: 24px;
+}
+.home-screen .summary-grid .summary .symbol svg {
+  width: 24px;
+  height: 24px;
+}
+.home-screen .summary-grid .summary.climate {
+  --category-color: #42cdeb;
+}
+.home-screen .summary-grid .summary.lighting {
+  --category-color: #ffcf16;
+}
+.home-screen .summary-grid .summary.security {
+  --category-color: #14d1ba;
+}
+.home-screen .summary-grid .summary.shutters {
+  --category-color: #85bbf2;
+}
+.home-screen .summary-grid .summary strong {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 550;
+  line-height: 1.2;
+}
+.home-screen .summary-grid .summary small {
+  color: #ffffff9e;
+  font-size: 12px;
+  font-weight: 400;
+  margin-top: 3px;
+  line-height: 1.2;
+}
+.home-screen .summary-grid .summary:hover,
+.home-screen .summary-grid .summary.selected {
+  background: #ffffff20;
+  border-color: #ffffff21;
+  box-shadow: none;
+}
+.cameras-section {
+  margin-bottom: 26px;
+}
+.camera-heading {
+  margin: 0 0 14px;
+}
+.section-link {
+  font-size: 20px;
+  font-weight: 550;
+  letter-spacing: -0.4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0;
+  min-height: 44px;
+  background: none;
+  color: inherit;
+  text-align: left;
+}
+.section-link svg {
+  width: 19px;
+  height: 19px;
+  opacity: 0.4;
+}
+.camera-demo-label {
+  font-size: 10px;
+  color: #ffffff9c;
+  background: #1e243a32;
+  padding: 5px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.camera-strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px;
+  height: clamp(225px, 26vw, 350px);
+  border-radius: 27px;
+  overflow: hidden;
+  background: #1a2235;
+  box-shadow: 0 6px 22px #1418260a;
+}
+.camera-preview {
+  padding: 0;
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  display: block;
+  background: #242a35;
+  color: #fff;
+  border-radius: 0;
+  text-align: left;
+}
+.camera-preview:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    #0008,
+    transparent 38%,
+    transparent 75%,
+    #0004
+  );
+  pointer-events: none;
+}
+.camera-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+.camera-preview:hover img {
+  transform: scale(1.03);
+}
+.camera-preview:focus-visible {
+  outline-offset: -5px;
+  z-index: 1;
+}
+.camera-name {
+  position: absolute;
+  top: 16px;
+  left: 17px;
+  z-index: 1;
+  font-size: 12px;
+  font-weight: 500;
+  text-shadow: 0 1px 8px #0008;
+}
+.camera-time {
+  position: absolute;
+  bottom: 16px;
+  left: 17px;
+  z-index: 1;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  text-shadow: 0 1px 8px #0008;
+}
+.camera-expand {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  z-index: 1;
+  opacity: 0.8;
+}
+.camera-expand svg {
+  width: 18px;
+  height: 18px;
+}
+.home-screen .room-tabs {
+  margin: 24px 0 28px;
+  gap: 6px;
+}
+.home-screen .room-tabs .pill {
+  color: #ffffff9c;
+  font-size: 11px;
+  padding: 8px 13px;
+}
+.home-screen .room-tabs .pill.active {
+  background: #ffffff16;
+  color: #fff;
+  border-color: #ffffff15;
+  box-shadow: none;
+}
+.home-screen .room-tabs .pill:hover {
+  color: #fff;
+}
+.home-screen .rooms {
+  gap: 9px 28px;
+}
+.home-screen .room .section-title {
+  margin: 0 0 15px;
+  min-height: 30px;
+}
+.home-screen .room .section-title h2 {
+  font-size: 20px;
+  letter-spacing: -0.4px;
+  font-weight: 550;
+}
+.home-screen .room .section-title > div {
+  gap: 2px;
+}
+.room-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 44px;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+.room-chevron {
+  display: inline-flex;
+  opacity: 0.45;
+}
+.home-screen .room-chevron svg {
+  width: 18px;
+  height: 18px;
+  color: #fff;
+}
+.home-screen .room-info {
+  color: #ffffff85;
+}
+.home-screen .device-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 30px;
+}
+.home-screen .device {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 11px;
+  min-height: 87px;
+  padding: 12px 16px 12px 12px;
+  border-radius: 31px;
+  background: #2422354d;
+  border: 1px solid transparent;
+  box-shadow: none;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  overflow: hidden;
+}
+.home-screen .device.on {
+  background: #ffffff24;
+  border-color: #ffffff08;
+}
+.home-screen .device:hover {
+  transform: none;
+  background: #ffffff22;
+}
+.home-screen .device.on:hover {
+  background: #ffffff2e;
+}
+.device-toggle {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  display: grid;
+  place-items: center;
+}
+.home-screen .device .device-icon {
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  color: #ffffffef;
+  background: #19162c33;
+  border-radius: 50%;
+}
+.home-screen .device.on .device-icon {
+  color: #ffcf21;
+  background: #24223525;
+}
+.home-screen .device.cover.on .device-icon {
+  color: #89bff1;
+}
+.home-screen .device .device-icon svg {
+  width: 26px;
+  height: 26px;
+}
+.device-info {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0;
+  background: transparent;
+  text-align: left;
+}
+.home-screen .device .device-name {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 550;
+  line-height: 1.3;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.home-screen .device .device-state {
+  color: #ffffff9c;
+  font-size: 12px;
+  font-weight: 400;
+  margin-top: 3px;
+  line-height: 1.3;
+}
+.home-screen .device .level {
+  right: 11px;
+  bottom: 30px;
+  height: 25px;
+  background: #ffffff18;
+}
+.home-screen .device .level i {
+  background: #9fc3e9;
+}
+.home-screen .device.cover .device-info {
+  padding-right: 4px;
+}
+.home-screen .section-title > .tiny {
+  color: #ffffff85;
+}
+.home-screen .scenes-heading {
+  margin-top: 0;
+}
+.home-screen .scenes-heading h2 {
+  font-size: 20px;
+}
+.home-screen .scene {
+  background: #24223545;
+  border-color: transparent;
+  color: #fff;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+.home-screen .scene svg {
+  color: #f4d28c;
+}
+.home-screen .scene small {
+  color: #ffffff80;
+}
+.home-screen .scene.active {
+  background: #ffffff25;
+  border-color: #ffffff20;
+}
+.home-screen .scene:hover {
+  background: #ffffff25;
+}
+.home-screen .bottom-insight {
+  margin-top: 26px;
+}
+.home-screen main .card {
+  background: #24223540;
+  border-color: #ffffff08;
+}
+.home-screen main .card p,
+.home-screen main .value small {
+  color: #ffffff90;
+}
+.home-screen main .tag {
+  background: #ffffff18;
+  color: #d5e8bf;
+}
+.home-screen main .spark {
+  color: #bacba8;
+}
+.home-screen .automation-preview > span {
+  background: #ffffff14;
+  color: #efd9b5;
+}
+.home-screen footer {
+  color: #ffffff60;
+}
+.home-screen footer > span:first-child {
+  border-color: #ffffff20;
+}
+/* Camera dialogs stay explicitly marked as demonstrations. */
+dialog.camera-dialog {
+  width: 820px;
+  max-width: calc(100% - 32px);
+  padding: 25px;
+  border: 1px solid #ffffff20;
+  background: #242938;
+  color: #fff;
+}
+.camera-dialog .modal-head {
+  margin-bottom: 12px;
+}
+.camera-dialog .icon-button {
+  color: #ffffffb0;
+}
+.camera-dialog .icon-button:hover {
+  background: #ffffff15;
+}
+.camera-description {
+  color: #ffffff8f;
+  font-size: 11px;
+  line-height: 1.7;
+  margin: 12px 0;
+}
+.camera-credit {
+  color: #ffffff60;
+  font-size: 10px;
+}
+.gallery-strip {
+  height: 310px;
+  margin-top: 20px;
+}
+.camera-detail {
+  position: relative;
+  background: #121722;
+  border-radius: 19px;
+  overflow: hidden;
+}
+.camera-detail img {
+  display: block;
+  width: 100%;
+  max-height: 60dvh;
+  object-fit: contain;
+}
+.camera-detail .camera-time {
+  padding: 5px 10px;
+  left: 11px;
+  bottom: 11px;
+  border-radius: 15px;
+  background: #0005;
+}
+.camera-demo-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  border-radius: 15px;
+  padding: 6px 10px;
+  color: #fff;
+  background: #171b269c;
+  font-size: 10px;
+}
+.camera-switcher {
+  display: flex;
+  gap: 8px;
+  margin: 18px 0;
+}
+.camera-switcher button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 16px;
+  min-height: 44px;
+  border-radius: 25px;
+  background: #ffffff08;
+  color: #ffffff85;
+  font-size: 11px;
+}
+.camera-switcher button svg {
+  width: 17px;
+  height: 17px;
+}
+.camera-switcher button.active {
+  background: #ffffff16;
+  color: #fff;
+}
+.camera-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 18px;
+}
+.camera-toolbar .btn {
+  color: #fff;
+  background: #ffffff14;
+  min-height: 44px;
+}
+dialog.camera-expanded {
+  width: 100vw;
+  max-width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0;
+  inset: 0;
+  border-radius: 0;
+  padding: max(22px, env(safe-area-inset-top))
+    max(22px, env(safe-area-inset-right)) max(22px, env(safe-area-inset-bottom))
+    max(22px, env(safe-area-inset-left));
+}
+.camera-expanded #modal-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.camera-expanded .camera-detail {
+  flex: 1;
+  min-height: 0;
+}
+.camera-expanded .camera-detail img {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: contain;
+}
+.camera-expanded .modal-head,
+.camera-expanded .camera-switcher,
+.camera-expanded .camera-toolbar,
+.camera-expanded .camera-description {
+  flex-shrink: 0;
+}
+@media (max-width: 1150px) {
+  .home-screen .rooms {
+    grid-template-columns: 1fr;
+  }
+  .home-screen .device-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 850px) {
+  .home-screen .device-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .home-screen .topbar {
+    height: 53px;
+    border-bottom: 0;
+  }
+  .home-screen .topbar #breadcrumb {
+    color: #ffffff8f;
+  }
+  .home-screen main {
+    padding: 24px 20px 25px;
+  }
+  .home-screen h1 {
+    font-size: 32px;
+    letter-spacing: -0.8px;
+  }
+  .home-screen .page-head {
+    margin-bottom: 21px;
+  }
+  .home-screen .page-head .date {
+    display: none;
+  }
+  .home-screen .summary-grid {
+    margin: 0 -20px 25px;
+    padding: 2px 20px 5px;
+    gap: 9px;
+  }
+  .home-screen .summary-grid .summary {
+    gap: 8px;
+    padding: 9px 13px;
+    min-width: 0;
+  }
+  .home-screen .summary-grid .summary strong {
+    font-size: 12px;
+  }
+  .home-screen .summary-grid .summary small {
+    font-size: 12px;
+  }
+  .home-screen .summary-grid .summary .symbol {
+    width: 20px;
+    height: 28px;
+  }
+  .home-screen .summary-grid .summary .symbol svg {
+    width: 21px;
+    height: 23px;
+  }
+  .cameras-section {
+    margin-bottom: 27px;
+  }
+  .camera-heading {
+    margin-bottom: 9px;
+  }
+  .section-link {
+    font-size: 20px;
+  }
+  .camera-demo-label {
+    font-size: 9px;
+    padding: 4px 7px;
+  }
+  .camera-strip {
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 23px;
+  }
+  .camera-name {
+    top: 13px;
+    left: 12px;
+    font-size: 10px;
+  }
+  .camera-time {
+    bottom: 13px;
+    left: 12px;
+    font-size: 12px;
+  }
+  .camera-expand {
+    bottom: 13px;
+    right: 12px;
+  }
+  .camera-expand svg {
+    width: 15px;
+    height: 15px;
+  }
+  .home-screen .room-tabs {
+    margin: 0 -20px 23px;
+    padding: 0 20px;
+  }
+  .home-screen .room .section-title {
+    margin-bottom: 13px;
+  }
+  .home-screen .room .section-title h2 {
+    font-size: 20px;
+  }
+  .home-screen .room-info {
+    font-size: 9px;
+  }
+  .home-screen .device-grid {
+    gap: 9px;
+    margin-bottom: 27px;
+  }
+  .home-screen .device {
+    min-height: 73px;
+    padding: 10px;
+    gap: 9px;
+    border-radius: 27px;
+  }
+  .home-screen .device .device-icon {
+    width: 39px;
+    height: 39px;
+  }
+  .home-screen .device .device-icon svg {
+    width: 25px;
+    height: 25px;
+  }
+  .device-toggle {
+    flex-basis: 44px;
+  }
+  .home-screen .device .device-name {
+    font-size: 12px;
+  }
+  .home-screen .device .device-state {
+    font-size: 12px;
+  }
+  .home-screen .device .level {
+    bottom: 24px;
+    height: 24px;
+    right: 9px;
+  }
+  .home-screen .device.cover {
+    padding-right: 15px;
+  }
+  .home-screen .bottom-insight {
+    grid-template-columns: 1fr;
+  }
+  .home-screen #mobile-nav {
+    background: linear-gradient(135deg, #d5c0d45c, #9faeb85c);
+    border-color: #ffffff40;
+    box-shadow:
+      inset 0 1px 0 #ffffff4d,
+      0 6px 24px #15182e26;
+  }
+  .home-screen .mobile-link {
+    color: #ffffffd9;
+    --glyph-cutout: #aaa2b5;
+  }
+  .home-screen .mobile-link.active {
+    color: #ffd35d;
+    background: #4933454d;
+    box-shadow: inset 0 1px 0 #ffffff08;
+    --glyph-cutout: #726071;
+  }
+  .home-screen .mobile-link.active .nav-symbol {
+    color: #ffd35d;
+  }
+  .home-screen #more-button[aria-expanded="true"] {
+    background: #ffffff20;
+  }
+  dialog.camera-dialog {
+    padding: 19px;
+    max-width: calc(100% - 20px);
+    border-radius: 24px;
+  }
+  dialog.camera-expanded {
+    max-width: 100vw;
+    border-radius: 0;
+    padding: max(18px, env(safe-area-inset-top)) 18px
+      max(18px, env(safe-area-inset-bottom));
+  }
+  .camera-dialog .modal-head h2 {
+    font-size: 22px;
+  }
+  .gallery-strip {
+    aspect-ratio: 1.4;
+    height: auto;
+  }
+  .camera-switcher button {
+    flex: 1;
+  }
+  .camera-toolbar .btn {
+    padding: 11px 13px;
+    font-size: 11px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .camera-preview img {
+    transition: none;
+  }
+}

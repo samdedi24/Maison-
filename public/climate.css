@@ -1,0 +1,453 @@
+/* Room-based climate, with individual thermometers kept visible. */
+.climate-room-picker {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 3px 1px 8px;
+  margin: 20px 0 24px;
+}
+.climate-room-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 12px 17px;
+  min-height: 44px;
+  border-radius: 26px;
+  border: 1px solid transparent;
+  background: #eae9e1;
+  color: #8a9080;
+  font-size: 12px;
+}
+.climate-room-pill svg {
+  width: 18px;
+  height: 18px;
+}
+.climate-room-pill.active {
+  background: #fff;
+  border-color: #e2e5d9;
+  color: #5b6b4c;
+  box-shadow: 0 2px 8px #282b1607;
+}
+.climate-room-pill:hover {
+  color: #566447;
+}
+.climate-areas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 19px;
+}
+.climate-area-card {
+  padding: 23px;
+}
+.climate-area-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.climate-area-head h2 {
+  font-size: 16px;
+}
+.climate-area-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0;
+  min-height: 44px;
+  text-align: left;
+  background: none;
+  font: inherit;
+  color: #56634c;
+}
+.climate-area-name > svg {
+  width: 19px;
+  height: 19px;
+  color: #8a967c;
+}
+.climate-area-name > svg:last-child {
+  width: 14px;
+  height: 14px;
+  color: #b5bba9;
+}
+.climate-sensor-count {
+  font-size: 10px;
+  color: #929b85;
+  padding: 5px 8px;
+  border-radius: 20px;
+  background: #eef0e6;
+  white-space: nowrap;
+}
+.climate-area-reading {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 15px 0 20px;
+}
+.climate-area-reading > strong {
+  font-size: 42px;
+  font-weight: 450;
+  letter-spacing: -1.8px;
+  line-height: 1.1;
+}
+.climate-area-reading > span {
+  color: #8e9b83;
+  font-size: 12px;
+}
+.climate-area-reading > span > svg {
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+  margin-right: 3px;
+}
+.climate-area-reading small {
+  display: block;
+  font-size: 10px;
+  color: #a1a696;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.thermometer-list {
+  display: grid;
+  gap: 7px;
+}
+.thermometer-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 10px;
+  min-height: 65px;
+  width: 100%;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  background: #eeefe74d;
+  text-align: left;
+}
+.thermometer-row:hover {
+  background: #e9eddf99;
+}
+.thermometer-row.selected {
+  background: #e9eddf;
+  border-color: #d2dac4;
+}
+.thermometer-symbol {
+  display: grid;
+  place-items: center;
+  flex: 0 0 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #f4ecdb;
+  color: #c2a162;
+}
+.thermometer-symbol svg {
+  width: 18px;
+  height: 18px;
+}
+.thermometer-identity {
+  min-width: 0;
+  flex: 1;
+}
+.thermometer-identity strong {
+  display: block;
+  color: #626a57;
+  font-size: 11px;
+  font-weight: 550;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.thermometer-identity small {
+  display: block;
+  color: #a0a793;
+  font-size: 9px;
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.thermometer-values {
+  text-align: right;
+  white-space: nowrap;
+}
+.thermometer-values strong {
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+  color: #65744e;
+}
+.thermometer-values small {
+  display: block;
+  color: #9aa48d;
+  font-size: 9px;
+  margin-top: 4px;
+}
+.thermometer-chevron {
+  display: inline-flex;
+  color: #b7bdac;
+}
+.thermometer-chevron svg {
+  width: 12px;
+  height: 12px;
+}
+.thermometer-row.unavailable .thermometer-symbol {
+  background: #e9e9e0;
+  color: #adae9f;
+}
+.thermometer-row.unavailable .thermometer-values strong {
+  color: #b1b5a5;
+}
+.climate-area-card .thermostat {
+  margin-top: 17px;
+  padding-top: 15px;
+}
+.climate-area-card .thermostat label {
+  font-size: 10px;
+}
+.climate-areas.focused {
+  grid-template-columns: 1fr;
+}
+.climate-areas.focused .climate-area-card {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  column-gap: 35px;
+  align-items: start;
+}
+.climate-areas.focused .climate-area-head,
+.climate-areas.focused .climate-area-reading,
+.climate-areas.focused .thermostat {
+  grid-column: 1;
+}
+.climate-areas.focused .thermometer-list {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+}
+.climate-history {
+  margin-top: 35px;
+  padding-top: 28px;
+  border-top: 1px solid #e0e3d6;
+  scroll-margin-top: 24px;
+}
+.climate-history-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+.climate-history-head .eyebrow {
+  display: block;
+  font-size: 9px;
+  margin: 0 0 8px;
+}
+.climate-history-head h2 {
+  font-size: 21px;
+  line-height: 1.4;
+}
+.climate-history-head p {
+  font-size: 11px;
+  color: #929b85;
+  line-height: 1.7;
+  margin: 7px 0 0;
+}
+.climate-active-count {
+  color: #8c9a7c;
+  background: #e9eddf;
+  padding: 7px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  white-space: nowrap;
+}
+.climate-history-controls {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 24px 0 15px;
+}
+.climate-source {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #929b85;
+  font-size: 11px;
+}
+.climate-source select {
+  font: inherit;
+  padding: 11px 30px 11px 13px;
+  min-height: 44px;
+  border: 1px solid #e0e5d6;
+  border-radius: 14px;
+  background: #fff9;
+  color: #69775a;
+  max-width: 250px;
+}
+.climate-source select:focus-visible {
+  outline: 3px solid #d99b46;
+  outline-offset: 3px;
+}
+.climate-history .kpi-grid {
+  margin-top: 20px;
+}
+.climate-history .kpi > span {
+  font-size: 10px;
+}
+.climate-history .card > p {
+  min-height: 20px;
+}
+.climate-empty {
+  min-height: 205px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  padding: 20px;
+  color: #a5ad96;
+}
+.climate-empty svg {
+  width: 29px;
+  height: 29px;
+}
+.climate-empty strong {
+  color: #929d82;
+  font-size: 12px;
+  font-weight: 500;
+}
+.climate-empty span {
+  max-width: 250px;
+  font-size: 10px;
+  line-height: 1.7;
+}
+.climate-footnote {
+  font-size: 10px;
+  line-height: 1.9;
+  color: #a0a791;
+  margin: 20px 0 0;
+}
+.climate-room-shortcut {
+  background: none;
+  padding: 5px 0;
+  min-height: 44px;
+  text-align: right;
+}
+.home-screen .climate-room-shortcut:hover {
+  color: #fff;
+}
+@media (max-width: 1150px) {
+  .climate-areas {
+    gap: 14px;
+  }
+  .climate-area-card {
+    padding: 18px;
+  }
+  .thermometer-row {
+    gap: 8px;
+    padding: 11px 8px;
+  }
+  .thermometer-identity strong {
+    font-size: 10px;
+  }
+  .thermometer-chevron {
+    display: none;
+  }
+  .climate-areas.focused .climate-area-card {
+    column-gap: 25px;
+  }
+  .climate-history-controls {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+}
+@media (max-width: 850px) {
+  .climate-areas {
+    grid-template-columns: 1fr;
+  }
+  .climate-area-card {
+    padding: 22px;
+  }
+  .thermometer-identity strong {
+    font-size: 12px;
+  }
+  .thermometer-values strong {
+    font-size: 15px;
+  }
+  .climate-areas.focused .climate-area-card {
+    display: block;
+  }
+  .climate-history-head {
+    gap: 14px;
+  }
+  .climate-history-head h2 {
+    font-size: 19px;
+  }
+}
+@media (max-width: 600px) {
+  .climate-room-picker {
+    margin: 20px -20px 20px;
+    padding: 3px 20px 8px;
+    gap: 7px;
+  }
+  .climate-room-pill {
+    font-size: 11px;
+    padding: 10px 15px;
+  }
+  .climate-area-card {
+    padding: 19px;
+  }
+  .climate-area-reading {
+    margin: 13px 0 19px;
+  }
+  .thermometer-row {
+    padding: 12px 9px;
+  }
+  .thermometer-identity strong {
+    font-size: 11px;
+  }
+  .thermometer-identity small {
+    font-size: 9px;
+  }
+  .climate-history {
+    margin-top: 28px;
+    padding-top: 25px;
+  }
+  .climate-history-head {
+    display: block;
+  }
+  .climate-active-count {
+    display: inline-block;
+    margin-top: 12px;
+  }
+  .climate-history-head h2 {
+    font-size: 18px;
+  }
+  .climate-history-controls {
+    display: block;
+  }
+  .climate-history-controls .segmented {
+    margin-top: 15px;
+    max-width: none;
+  }
+  .climate-source {
+    display: block;
+  }
+  .climate-source select {
+    display: block;
+    max-width: none;
+    width: 100%;
+    margin-top: 7px;
+  }
+  .climate-history .kpi {
+    padding: 18px 14px;
+  }
+  .climate-history .kpi strong {
+    font-size: 28px;
+  }
+  .climate-history .kpi small {
+    font-size: 9px;
+    line-height: 1.6;
+    display: block;
+  }
+  .climate-footnote {
+    font-size: 9px;
+  }
+}
