@@ -89,7 +89,7 @@ Instruction de départ suggérée :
 
 > Lis CLAUDE.md et docs/HOME_ASSISTANT.md. Inspecte le dépôt et lance les vérifications. Préserve l’interface validée et le mode démo. Poursuis le raccordement à mon Home Assistant Container sur QNAP, en commençant par les pièces, les entités et les thermomètres. Demande uniquement les informations de connexion manquantes ; n’invente aucun jeton ni identifiant d’entité. Ne place aucun jeton dans le code du navigateur.
 
-Le contexte produit est conservé dans [docs/DECISIONS.md](docs/DECISIONS.md). Le détail des fichiers et des règles de développement se trouve dans [CLAUDE.md](CLAUDE.md).
+Le contexte produit est conservé dans [docs/DECISIONS.md](docs/DECISIONS.md). [CLAUDE.md](CLAUDE.md) reste volontairement court pour limiter le contexte chargé automatiquement. Les détails sont consultables à la demande dans [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) et [docs/HOME_ASSISTANT.md](docs/HOME_ASSISTANT.md).
 
 ## Vérifier les modifications
 
