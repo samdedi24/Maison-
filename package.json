@@ -2,7 +2,7 @@
   "name": "maison-plus",
   "version": "0.1.0",
   "private": true,
-  "description": "Maison+ : interface domotique inspirée d’Apple Maison, démo à raccorder à Home Assistant.",
+  "description": "Maison+ : tableau de bord natif Home Assistant, électricité Linky, météo et températures par pièce.",
   "type": "module",
   "engines": {
     "node": ">=22.9.0"
@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node --env-file-if-exists=.env server.mjs",
     "dev": "node --watch --env-file-if-exists=.env server.mjs",
-    "test": "node --test tests/*.test.mjs",
-    "check": "node --check server.mjs && node --check public/app.js && node --check public/climate.js"
+    "test": "node --test tests/*.test.mjs homeassistant/tests/*.test.mjs",
+    "check": "node --check server.mjs && node --check public/app.js && node --check public/climate.js && node --check homeassistant/www/maison-plus/card.js && node --check homeassistant/www/maison-plus/data.js"
   }
 }

@@ -1,41 +1,39 @@
-# Décisions produit validées
+# Périmètre produit actuel — Maison+
 
-## Objectif
+## Changement de direction
 
-Retrouver les repères visuels d’Apple Maison tout en bénéficiant des appareils et fonctions de Home Assistant. Le propriétaire possède déjà Home Assistant Container sur QNAP ; Philips Hue, volets roulants et appareils Zigbee font partie de l’équipement prévu.
+Le propriétaire conserve **Apple Maison pour le pilotage** : lumières Hue, volets, caméras, chauffage et autres commandes continuent d’y être utilisés. Il ne souhaite plus une application web autonome reproduisant toutes ces commandes.
 
-La version du dépôt est une démo autonome destinée à être reprise avec Claude Code. La connexion à l’installation réelle constitue la prochaine étape.
+La cible devient **un dashboard natif Home Assistant, nommé Maison+, dans la barre latérale**. L’installation est Home Assistant Container sur QNAP. Le propriétaire a confirmé un **Linky avec module TIC** ; le modèle et l’intégration du module ne sont pas présumés.
 
-## Interface retenue
+## Fonctions retenues
 
-- Bulles horizontales avec pictogramme à gauche, nom et état à droite.
-- Appareils regroupés par pièce, et catégories Climat, Lumières, Sécurité et Volets en haut de l’accueil.
-- Menu mobile flottant, effet de verre, pictogrammes pleins reconnaissables et sélection dorée.
-- Section Caméras sous les catégories : deux aperçus côte à côte dans un cadre arrondi, agrandissement au toucher.
-- Vues Maison, Volets, Climat, HomeView, Conso, Sécurité et Plan.
-- Widgets HomeView réorganisables et export/import des réglages de démonstration.
+| Fonction               | Choix                                                                                             |
+| ---------------------- | ------------------------------------------------------------------------------------------------- |
+| Électricité            | Utiliser le tableau de bord Énergie et ses cartes natives, à partir des index réels du Linky TIC. |
+| Météo extérieure       | Afficher l’entité `weather` choisie et les prévisions effectivement disponibles.                  |
+| Thermomètres           | Les regrouper par pièce Home Assistant, en conservant chaque capteur identifiable.                |
+| Historique des relevés | Ouvrir le dialogue natif Home Assistant et son historique disponible.                             |
+| Plan 3D                | Option ultérieure, conditionnée au plan et à la géométrie réels du logement.                      |
 
-La forme des bulles et l’organisation comptent davantage que la reproduction exacte des couleurs. Le fond diffus actuel est accepté comme base ; aucune obligation ne lie les futurs thèmes à cette palette.
+## Règles importantes
 
-## Climat par pièce
+- L’affectation d’une entité à une pièce prime sur celle de son appareil. Utiliser les identifiants de registre, jamais une déduction depuis le nom affiché.
+- Plusieurs thermomètres d’une même pièce restent distincts. Température et humidité sont traitées séparément ; les données absentes ou indisponibles ne deviennent pas zéro.
+- Ne pas inventer d’entités, mesures, tarifs ou prévisions pour remplir l’interface.
+- Distinguer énergie Wh/kWh, puissance active W/kW et puissance apparente VA. Les coûts demandent une configuration tarifaire réelle.
+- La version native utilise la session Home Assistant et ses données. Aucun serveur web indépendant, secret frontend ou conteneur supplémentaire n’est requis pour cette cible.
+- Le travail n’est pas validé sur le Home Assistant réel tant que l’installation et les sources n’ont pas été vérifiées sur le QNAP.
 
-Le besoin central est de dépasser une vue globale limitée : chaque thermomètre doit être rattaché à la pièce où il se trouve.
+## Hors périmètre actuel
 
-- Une pièce peut contenir plusieurs thermomètres, tous consultables individuellement.
-- Elle dispose d’une moyenne calculée uniquement avec ses capteurs disponibles.
-- La température et l’humidité sont calculées séparément.
-- Les filtres pièce/capteur et les périodes 24 h, 7 jours et 30 jours s’appliquent aux graphiques et statistiques.
-- Une absence de donnée s’affiche « — » et ne devient pas 0.
-- La moyenne maison donne le même poids à chaque pièce disposant de mesures.
-- Les valeurs par pièce sur l’accueil ouvrent directement le Climat de cette pièce.
+- Refaire l’application de pilotage Apple Maison, les commandes de lumières/volets/chauffage ou une section de contrôle caméra concurrente.
+- Apple TV/tvOS.
+- Afficher un faux logement ou une simple illustration comme s’il s’agissait du véritable plan 3D.
+- Supposer le fournisseur météo, le modèle TIC, un contrat électrique ou l’adresse du volume QNAP.
 
-Dans la démo, les pièces sont fictives. Dans la version connectée, le classement doit reprendre les pièces définies dans Home Assistant et leurs identifiants de registre.
+## Ancienne démo conservée
 
-## Limites et exclusions
+L’interface de `public/`, le serveur `server.mjs` et les fichiers Docker sont conservés comme **ancienne démo web**. Leurs commandes et données sont simulées. Ce n’est plus la solution à installer pour le besoin actuel.
 
-- **Apple TV/tvOS exclu**, à la demande du propriétaire.
-- Aucune connexion Home Assistant, Hue, Zigbee, caméra ou fournisseur d’énergie n’est encore implémentée dans ce dépôt.
-- Le plan est illustratif et sera remplacé par celui du logement.
-- Les caméras sont des photos fixes d’illustration.
-- Les sauvegardes proposées ne sont pas des sauvegardes de l’installation Home Assistant.
-- Le dépôt n’est pas une extension HACS ni un dashboard Lovelace installable directement.
+Voir [WEB_DEMO.md](WEB_DEMO.md) pour cette archive. Les anciennes décisions sur les bulles et palettes peuvent servir de référence visuelle, sans imposer l’ancien périmètre à la version native.

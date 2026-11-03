@@ -1,0 +1,12 @@
+# Option avancée uniquement : tableau de bord piloté par un fichier YAML.
+# Pour l'installation via l'interface, ce fichier n'est pas nécessaire.
+# FUSIONNER avec le bloc lovelace: existant, ne jamais créer un second bloc.
+# Ne pas modifier le mode de gestion des ressources HACS existantes.
+lovelace:
+  dashboards:
+    maison-plus:
+      mode: yaml
+      filename: maison-plus.yaml
+      title: Maison+
+      icon: mdi:home-analytics
+      show_in_sidebar: true

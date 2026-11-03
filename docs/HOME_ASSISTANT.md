@@ -1,78 +1,65 @@
-# Raccorder Maison+ à Home Assistant
+# Architecture native Home Assistant
 
-Ce document décrit la suite à développer. **Aucune connexion Home Assistant n’est présente dans cette version.** L’application actuelle reste utilisable en mode démo sans compte ni accès à la maison.
+La cible actuelle est le dashboard de [`homeassistant/`](../homeassistant/README.md), intégré à la barre latérale de Home Assistant. **Apple Maison conserve le pilotage.** L’ancien adaptateur réseau pour l’application web autonome n’est plus la direction à poursuivre.
 
-## Installation cible
+## Fonctionnement
 
-L’installation du propriétaire est Home Assistant **Container sur QNAP**. Ce mode ne propose pas le Supervisor ni le magasin d’add-ons de Home Assistant OS. Maison+ peut être hébergé dans un conteneur séparé sur le NAS ; un futur service API pourrait y être ajouté. Les intégrations Hue, Zigbee et volets restent gérées dans Home Assistant.
+`homeassistant/dashboard.yaml` assemble des cartes Énergie natives et la carte personnalisée `custom:maison-plus-card`. Le module `www/maison-plus/card.js` reçoit l’objet **`hass`** de Home Assistant ; `data.js` contient les fonctions de données et de regroupement.
 
-Le dépôt actuel contient une application web indépendante, pas un dashboard Lovelace. Une intégration dans l’interface Home Assistant nécessitera un choix supplémentaire de présentation et de déploiement. Installer HACS ne branche pas cette application automatiquement.
+La version native utilise la session et les entités du Home Assistant dans lequel elle est chargée. Elle ne nécessite ni serveur Node, ni proxy API externe, ni jeton longue durée à saisir. Les droits de la session s’appliquent ; une erreur ou une source absente doit être affichée, pas remplacée par des valeurs de démonstration.
 
-## Architecture à introduire
+Les dépendances d’exécution sont Home Assistant et les intégrations déjà configurées dans l’installation. Node.js sert aux tests locaux du dépôt seulement. La copie des fichiers et la déclaration du dashboard restent nécessaires avant de l’utiliser sur le vrai système.
 
-Séparer trois responsabilités avant de remplacer les données fictives :
+## Pièces et capteurs
 
-| Couche                    | Responsabilité                                                                            |
-| ------------------------- | ----------------------------------------------------------------------------------------- |
-| Source de démo            | Conserver les appareils et historiques simulés, accessibles sans Home Assistant.          |
-| Adaptateur Home Assistant | Authentification, registres, états, abonnements, historique, services et caméras.         |
-| Modèle de présentation    | Pièces, appareils, capteurs, agrégations et erreurs, consommés par l’interface existante. |
+Le classement utilise les registres Home Assistant :
 
-Les composants visuels ne doivent pas porter les secrets ni inventer la disponibilité d’un appareil.
+1. Pièce explicitement affectée à l’entité.
+2. Sinon, pièce de l’appareil associé.
+3. Sinon, groupe « Sans pièce ».
 
-## Authentification et réseau
+Conserver les identifiants `area_id`, `device_id` et `entity_id` comme identités. Deux capteurs appelés « Température » ne sont pas le même capteur ; une modification de nom ne doit pas les déplacer. Les modifications de registres doivent actualiser l’affectation, indépendamment des mises à jour de valeurs.
 
-Deux approches sont possibles ; il faut en choisir une avant l’implémentation :
+Identifier les relevés par leurs métadonnées et unités. Plusieurs thermomètres d’une pièce restent consultables individuellement. Les valeurs de température doivent être normalisées dans l’unité cible avant une moyenne. L’humidité est calculée séparément : un thermomètre qui ne mesure que la température ne fournit pas implicitement 0 % d’humidité.
 
-- **Service côté serveur / proxy de même origine** : le navigateur appelle Maison+, le service communique avec Home Assistant. Concevoir une authentification de l’utilisateur et limiter explicitement les routes et services exposés. Un proxy ouvert ou un secret partagé avec tous les visiteurs ne constitue pas une authentification.
-- **Application navigateur avec authentification Home Assistant** : utiliser le flux d’authentification adapté et la gestion de session correspondante. Traiter les renouvellements, expirations et déconnexions. Ne pas demander de coller un jeton longue durée dans le code frontend.
+Les états `unknown`, `unavailable`, les métriques absentes et les valeurs non numériques ne participent pas aux moyennes courantes. Une absence de données s’affiche « — ». Ne pas déclarer automatiquement un capteur indisponible au seul motif que sa valeur est stable depuis longtemps.
 
-Une application hébergée sur une autre origine peut nécessiter une configuration CORS explicite dans Home Assistant. Éviter d’autoriser toutes les origines. Une page HTTPS ne peut pas compter sur des appels HTTP non chiffrés vers Home Assistant : choisir des origines cohérentes ou un proxy local adapté. Pour un accès à distance, réutiliser le mode d’accès sécurisé de l’installation plutôt que supposer le NAS publiquement accessible.
+Les options `exclude_areas`, `exclude_entities` et `include_diagnostic` permettent d’adapter la sélection. Toucher un relevé déclenche l’ouverture du dialogue natif de l’entité. L’historique dépend des données réellement conservées par Home Assistant ; aucun historique sinusoïdal ou stockage parallèle n’est ajouté.
 
-Les éventuelles variables sensibles seront configurées côté serveur, ignorées par Git et absentes des réponses au navigateur. Le serveur statique fourni n’implémente aucun de ces mécanismes.
+## Électricité : Linky et TIC
 
-## Pièces et thermomètres
+Le propriétaire dispose d’un Linky avec module TIC. Le dashboard s’appuie sur **la configuration Énergie native** ; il ne choisit pas arbitrairement une intégration du module ou un identifiant de capteur.
 
-1. Lire les registres des pièces, appareils et entités ainsi que les états initiaux. Les API WebSocket offrent notamment les commandes de registre `config/area_registry/list`, `config/device_registry/list` et `config/entity_registry/list`, selon les droits du compte.
-2. Pour chaque entité, résoudre la pièce dans cet ordre : `entity.area_id`, puis `device.area_id`, puis « Sans pièce ». Une affectation explicite de l’entité prime sur celle de son appareil.
-3. Conserver les `area_id`, `device_id` et `entity_id` comme identités. Deux capteurs nommés « Capteur fenêtre » dans deux pièces ne sont pas le même appareil.
-4. Rapprocher les entités de température et d’humidité d’un même thermomètre à partir des métadonnées de l’appareil. Une entité d’humidité peut être absente.
-5. Identifier les mesures à partir du domaine, de la classe de l’appareil et de l’unité. Normaliser les unités avant une moyenne ; ne pas mélanger °C et °F.
-6. Suivre les mises à jour des registres pour qu’un déplacement d’appareil ou une réaffectation de pièce soit reflété dans l’interface.
+- Les compteurs de consommation sont des **énergies cumulées**, avec les métadonnées et unités prises en charge par Énergie, couramment Wh/kWh et `state_class` `total` ou `total_increasing` selon leur comportement.
+- Une **puissance active** en W/kW est une autre mesure. Un graphe de puissance ne doit être ajouté que si une source compatible est réellement disponible et configurée.
+- La **puissance apparente** en VA/kVA n’est ni une énergie en kWh ni nécessairement une puissance active en W. Aucune conversion implicite ne doit masquer cette différence.
+- Un coût dépend d’un tarif réel configuré. Ne pas importer les anciens chiffres fictifs, l’abonnement, Tempo ou EcoWatt de la démo comme des données réelles.
+- Les cartes natives peuvent afficher une absence de données pendant la configuration et la collecte initiale des statistiques. Une page vide ne justifie pas la création de valeurs fictives.
 
-Les moyennes courantes doivent exclure `unknown`, `unavailable`, les valeurs non numériques et les métriques absentes. Une pièce sans mesure valide affiche « — ». La moyenne maison est une moyenne des pièces disponibles, avec un poids égal par pièce. Les capteurs sans pièce restent visibles et ne participent pas à cette moyenne.
+Les index détaillés doivent être utilisés sans double comptage entre un total et ses sous-index. Le format exact dépend des entités fournies par le module TIC et de son intégration existante.
 
-Le délai depuis la dernière modification d’état ne suffit pas à décider qu’un thermomètre est hors ligne. Une valeur stable sur un capteur sur pile peut être ancienne et rester valide ; utiliser les états de disponibilité et une politique de fraîcheur clairement définie si nécessaire.
+## Météo
 
-## États et commandes
+La section `weather` utilise une entité `weather` de Home Assistant. La sélection automatique n’est faite que si une seule entité correspond. En cas de plusieurs entités, l’utilisateur choisit celle souhaitée ou renseigne `weather_entity`. En cas d’absence, la carte indique qu’une intégration météo doit être configurée.
 
-Charger les états initiaux, puis suivre leurs changements via WebSocket. Prévoir une reconnexion avec réabonnement et resynchronisation, sans dupliquer les abonnements. Afficher une erreur lorsque la commande échoue ; ne pas présenter systématiquement un état optimiste comme confirmé.
+La carte demande un type de prévision (`daily`, `hourly` ou `twice_daily`) pris en charge par l’intégration ; à défaut du type demandé, elle peut afficher un autre type disponible. Sans prévision prise en charge, elle conserve les conditions courantes. Ne pas fabriquer de prévisions.
 
-Commencer par les lumières, les volets et les capteurs. Utiliser les services Home Assistant et les capacités des entités pour afficher uniquement les commandes compatibles : la position d’un volet, les couleurs Hue ou une consigne de chauffage ne sont pas universelles.
+## Déploiement
 
-## Historiques climat et énergie
+La copie native est dans `/config/www/maison-plus/` depuis le point de vue du conteneur Home Assistant. Le chemin hôte QNAP est celui du volume réellement monté en `/config`, à lire dans Container Station ou `docker inspect`.
 
-Les graphiques actuels sont générés pour la démo. Les remplacer par les données conservées par Recorder, les API d’historique et, lorsque pertinent, les statistiques de longue durée. La couverture réelle dépend de la configuration et de la durée de conservation de l’installation.
+Le dashboard est ajouté à l’installation existante, sans remplacer son conteneur, ses volumes ou les autres configurations Lovelace. Les instructions et fragments YAML sont dans [homeassistant/README.md](../homeassistant/README.md).
 
-- Aligner les séries temporelles avant de calculer une moyenne de plusieurs capteurs ; conserver les trous, les unités et les limites de couverture.
-- Conserver les mesures historiques valides antérieures à une indisponibilité actuelle, sans inventer de nouveaux relevés.
-- Calculer moyenne, minimum et maximum à partir de la série réellement affichée. Définir la pondération temporelle si la fréquence de mesure varie.
-- Séparer puissance instantanée, énergie cumulée et coût. Gérer les remises à zéro et les classes de statistiques adaptées.
-- Tempo, EcoWatt, abonnement et prix du kWh devront venir d’intégrations et du contrat réel. Les valeurs présentes ne sont pas les signaux réels du jour.
+## Plan 3D
 
-## Caméras
+Aucun véritable plan 3D n’est présent dans cette version. La géométrie et les correspondances avec les pièces réelles sont nécessaires avant de produire ce modèle. Voir [PLAN_3D.md](PLAN_3D.md).
 
-Les fichiers `public/assets/camera-*.jpg` sont des illustrations. Commencer par un aperçu authentifié depuis les entités caméra, puis ajouter le type de flux réellement compatible avec l’installation si souhaité. Le navigateur ne doit pas recevoir un jeton longue durée dans une URL d’image ou de vidéo. Un accès RTSP direct ne peut pas être supposé compatible avec Safari.
+## Vérification attendue sur l’installation réelle
 
-Conserver l’agrandissement, le choix de la caméra et les états indisponibles. Distinguer clairement une image fixe, la date de capture et un flux actif.
-
-## Critères de fin du premier raccordement
-
-- Le mode démo reste utilisable et visuellement inchangé.
-- Les pièces réelles et leurs thermomètres apparaissent avec leurs identifiants stables.
-- Deux thermomètres d’une même pièce restent distinguables, et leurs moyennes sont cohérentes.
-- Un changement de pièce, une entité indisponible et une absence d’humidité sont traités correctement.
-- Les courbes proviennent de l’historique réel et suivent la sélection.
-- Les commandes de lumière et de volet sont confirmées par les états remontés.
-- Aucun secret n’est livré dans les fichiers publics, les sauvegardes JSON ou les journaux.
-- Les tests passent et les parcours sont vérifiés sur iPhone et ordinateur.
+- Ressource chargée, dashboard visible, et permissions de registre suffisantes pour la session utilisée.
+- Sources Linky réellement configurées et unités correctes.
+- Météo choisie explicitement lorsque nécessaire ; prévisions compatibles.
+- Plusieurs thermomètres dans une pièce, capteur indisponible, humidité absente et changement de pièce traités correctement.
+- Dialogue du bon capteur ouvert au toucher ; données historiques disponibles selon Recorder.
+- Aucun service de pilotage envoyé par Maison+.
+- Parcours vérifiés dans le navigateur et l’application Companion du propriétaire.

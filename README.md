@@ -1,118 +1,73 @@
 # Maison+
 
-Une interface domotique inspirée d’Apple Maison, avec les outils et la liberté souhaités pour Home Assistant.
+**Maison+ est désormais un dashboard natif de Home Assistant, affiché dans sa barre latérale.** Apple Maison reste l’application utilisée pour les lumières, volets, caméras et autres commandes. Maison+ ajoute les informations souhaitées : électricité Linky, météo extérieure et thermomètres regroupés par pièce.
 
-Ce dépôt contient **la démo interactive validée**, prête à lancer et à reprendre avec Claude Code. Les appareils, mesures, historiques, caméras et consommations sont simulés. **Le raccordement à Home Assistant reste à développer.**
+La version native se trouve dans **[`homeassistant/`](homeassistant/README.md)**. Elle utilise la session Home Assistant existante, sans serveur Node à héberger ni jeton à copier. Il faut installer les fichiers et disposer des intégrations et mesures réelles dans Home Assistant. Cette installation n’a pas encore été vérifiée sur le Home Assistant du propriétaire.
 
-Il s’agit d’une application web indépendante en HTML, CSS et JavaScript. Ce code n’est pas un dashboard Lovelace, une carte HACS ou une intégration Home Assistant à installer telle quelle.
+## Ce qui est fourni
 
-## Lancer la démo
+| Partie      | Fonction                                                                                                                                                       |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Électricité | Cartes natives du tableau de bord Énergie de Home Assistant, alimentées par sa configuration existante. Le propriétaire dispose d’un Linky avec un module TIC. |
+| Météo       | Carte Maison+ utilisant une entité `weather` et ses prévisions disponibles.                                                                                    |
+| Pièces      | Détection des capteurs de température/humidité et classement par pièce Home Assistant, avec accès au dialogue et à l’historique natifs au toucher.             |
+| Plan 3D     | Préparation documentée uniquement. Aucun véritable modèle 3D n’est fourni sans le plan et la géométrie du logement.                                            |
 
-Prérequis : Node.js **22.9 ou plus récent**. Aucun paquet npm n’est nécessaire pour exécuter l’application.
+Les entités de l’installation ne sont pas inventées. Les cartes montrent les données disponibles ou expliquent ce qui manque ; elles ne remplacent pas ces données par des valeurs fictives.
+
+## Installer dans Home Assistant
+
+L’installation cible est Home Assistant **Container sur QNAP** :
+
+1. Copier le dossier `homeassistant/www/maison-plus/` dans le volume de configuration Home Assistant, pour obtenir `/config/www/maison-plus/` dans le conteneur.
+2. Ajouter la ressource JavaScript **module** `/local/maison-plus/card.js?v=1` dans les ressources des tableaux de bord.
+3. Créer un dashboard vide nommé **Maison+**, visible dans la barre latérale, puis y coller le contenu de `homeassistant/dashboard.yaml` dans l’éditeur de configuration brute.
+4. Configurer les sources Linky dans le tableau de bord Énergie de Home Assistant et vérifier les intégrations météo et capteurs.
+
+Si le dossier `www` vient d’être créé, redémarrer Home Assistant. Le chemin réel du dossier QNAP dépend du montage existant : ne pas supposer un chemin hôte.
+
+Les étapes détaillées, l’option de dashboard YAML et les réglages des cartes sont dans **[homeassistant/README.md](homeassistant/README.md)**. HACS n’est pas nécessaire pour cette installation manuelle.
+
+## Reprendre avec Claude Code
 
 ```bash
 git clone https://github.com/samdedi24/Maison-.git maison-plus
 cd maison-plus
-npm start
-```
-
-Ouvrir **http://127.0.0.1:3000**. Pour travailler sur le code :
-
-```bash
-npm run dev
-```
-
-Le mode développement redémarre le serveur lorsque ses fichiers changent ; actualiser le navigateur après une modification de l’interface. Les valeurs par défaut sont `HOST=127.0.0.1` et `PORT=3000`. Pour les adapter, copier `.env.example` vers `.env`, puis modifier cette copie locale. Aucun jeton Home Assistant n’est nécessaire.
-
-Une autre possibilité, avec Python 3 :
-
-```bash
-python3 -m http.server 3000 --directory public
-```
-
-Le serveur Python sert uniquement les fichiers de démonstration ; il ne remplace pas un futur service Home Assistant.
-
-## Ce que contient la démo
-
-| Vue      | Fonctions disponibles                                                                                                                                                        |
-| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Maison   | Bulles de catégories, appareils regroupés par pièce, scènes et deux aperçus caméra côte à côte. Toucher l’icône d’une lampe la bascule ; toucher son nom ouvre ses réglages. |
-| Volets   | Position, ouverture, fermeture, arrêt, commandes individuelles et globales, mouvement simulé.                                                                                |
-| Climat   | Plusieurs thermomètres par pièce, relevés individuels, moyennes et graphiques sur 24 h, 7 jours ou 30 jours.                                                                 |
-| HomeView | Widgets réorganisables par flèches ou glisser-déposer, raccourcis et vue personnalisable.                                                                                    |
-| Conso    | Exemples de puissance, kWh, coûts, répartition par appareil, Tempo et EcoWatt.                                                                                               |
-| Sécurité | État des ouvertures et alarme de démonstration.                                                                                                                              |
-| Plan     | Plan illustratif du logement et commandes d’éclairage.                                                                                                                       |
-
-Sur mobile, **Plus** donne accès aux caméras, à la sécurité, au plan et aux réglages. Les caméras utilisent des **photos fixes**, agrandissables, sans flux vidéo ni son.
-
-### Climat par pièce
-
-- Le Salon et la Chambre illustrent le cas de plusieurs thermomètres dans une même pièce.
-- La moyenne d’une pièce utilise ses capteurs disponibles. Température et humidité sont calculées séparément.
-- La moyenne maison donne le même poids à chaque pièce disposant de mesures, quel que soit son nombre de thermomètres.
-- Un capteur indisponible reste visible et ne participe pas aux moyennes. Une absence de mesure s’affiche « — ».
-- Les capteurs sans pièce sont regroupés dans « Sans pièce » lorsqu’ils existent et sont exclus de la moyenne maison.
-- Le choix d’une pièce ou d’un thermomètre change les courbes et les statistiques affichées.
-
-Les valeurs de l’accueil, du Plan et de HomeView utilisent les mêmes calculs. Les consignes de chauffage restent fictives.
-
-### Sauvegardes de la démo
-
-Les états des appareils, les consignes, l’alarme et la disposition des widgets sont enregistrés dans le `localStorage` du navigateur sous `maison-plus-demo`. Les réglages proposent un export et un import JSON validé, ainsi qu’une réinitialisation.
-
-Ces fichiers ne sont **pas des sauvegardes de Home Assistant**. Les relevés climat et les photos de démonstration ne représentent aucune installation réelle.
-
-## Sur un QNAP avec Container Station
-
-Depuis le dossier du projet sur le NAS, avec Docker Compose disponible :
-
-```bash
-docker compose up -d --build
-```
-
-Ouvrir `http://ADRESSE_DU_QNAP:3000`. Le port hôte peut être adapté dans `compose.yaml` s’il est déjà utilisé.
-
-Maison+ tourne dans **son propre conteneur**. Ne pas remplacer le conteneur Home Assistant existant. Cette installation héberge la démo ; elle ne connecte pas automatiquement les appareils.
-
-La configuration Compose a été vérifiée syntaxiquement. La construction de l’image et le déploiement sur le NAS réel restent à valider.
-
-## Reprendre avec Claude Code
-
-Depuis la copie locale du dépôt :
-
-```bash
 claude
 ```
 
-Instruction de départ suggérée :
+Instruction suggérée :
 
-> Lis CLAUDE.md et docs/HOME_ASSISTANT.md. Inspecte le dépôt et lance les vérifications. Préserve l’interface validée et le mode démo. Poursuis le raccordement à mon Home Assistant Container sur QNAP, en commençant par les pièces, les entités et les thermomètres. Demande uniquement les informations de connexion manquantes ; n’invente aucun jeton ni identifiant d’entité. Ne place aucun jeton dans le code du navigateur.
+> Lis CLAUDE.md puis homeassistant/README.md. Le projet cible le dashboard natif Home Assistant ; conserve Apple Maison pour les commandes. Inspecte le code et les tests, puis aide-moi à installer Maison+ sur Home Assistant Container sur QNAP, avec mon Linky TIC, ma météo et mes thermomètres par pièce. Demande uniquement les identifiants ou chemins réellement manquants, sans inventer d’entités ni de mesures.
 
-Le contexte produit est conservé dans [docs/DECISIONS.md](docs/DECISIONS.md). [CLAUDE.md](CLAUDE.md) reste volontairement court pour limiter le contexte chargé automatiquement. Les détails sont consultables à la demande dans [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) et [docs/HOME_ASSISTANT.md](docs/HOME_ASSISTANT.md).
+`CLAUDE.md` est court et renvoie aux documents utiles à la demande pour limiter le contexte chargé automatiquement.
 
-## Vérifier les modifications
+## Développer et vérifier
+
+Node.js 22.9+ sert uniquement aux vérifications locales du dépôt, **pas à l’exécution dans Home Assistant** :
 
 ```bash
 npm run check
 npm test
 ```
 
-`check` vérifie la syntaxe des scripts. Les tests couvrent les calculs et interactions de la démo ainsi que le serveur HTTP statique. Ils ne remplacent pas une vérification visuelle dans Safari sur iPhone, notamment pour les bulles, les dialogues et le menu flottant. Cette vérification navigateur n’a pas été automatisée ici.
+Les tests ne remplacent pas l’installation sur le vrai Home Assistant, la vérification des sources Linky et les essais sur iPhone.
 
 ## Organisation
 
 ```text
-public/             Interface et données de démonstration
-  index.html        Page et ordre de chargement des scripts
-  app.js            Navigation, appareils, scènes, caméras et réglages
-  climate.js        Modèle climat, regroupements, statistiques et graphiques
-  *.css             Styles de base, menu, accueil et climat
-  assets/           Photos locales utilisées pour les caméras fictives
-server.mjs          Serveur des fichiers statiques
-tests/              Vérifications automatiques
-docs/               Décisions, raccordement Home Assistant et sources des images
-CLAUDE.md           Consignes pour reprendre le projet
+homeassistant/
+  dashboard.yaml         Dashboard natif à importer
+  www/maison-plus/       Carte personnalisée et fonctions de données
+  tests/                 Vérifications de la version native
+  README.md              Installation et configuration
+CLAUDE.md                Contexte court pour Claude Code
+docs/HOME_ASSISTANT.md   Architecture et règles de données natives
+docs/DECISIONS.md        Périmètre produit actuel
+docs/PLAN_3D.md          Conditions pour un véritable plan 3D
+public/                  Ancienne démo web, conservée comme référence
+server.mjs, Dockerfile,
+compose.yaml             Hébergement de l’ancienne démo, pas du dashboard natif
 ```
 
-Les sources et remarques sur les images, les pictogrammes et la police sont dans [docs/ASSETS.md](docs/ASSETS.md).
+L’ancienne démo n’est plus la cible à installer. Sa documentation est archivée dans [docs/WEB_DEMO.md](docs/WEB_DEMO.md), avec ses [sources d’images](docs/ASSETS.md).

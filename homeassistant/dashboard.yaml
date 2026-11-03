@@ -1,0 +1,52 @@
+title: Maison+
+views:
+  - title: Électricité
+    path: electricite
+    icon: mdi:lightning-bolt
+    cards:
+      - type: markdown
+        content: >-
+          ## Électricité de la maison
+
+          Ces cartes utilisent vos sources configurées dans le tableau
+          **Énergie** de Home Assistant. Ajoutez-y les index d'énergie
+          de votre module Linky TIC et votre tarif pour afficher les coûts.
+      - type: energy-date-selection
+        collection_key: energy_maison_plus
+      - type: energy-usage-graph
+        title: Consommation électrique
+        collection_key: energy_maison_plus
+      - type: energy-distribution
+        collection_key: energy_maison_plus
+      - type: energy-sources-table
+        types:
+          - grid
+        collection_key: energy_maison_plus
+      # À décommenter après configuration d'une mesure de puissance active (W/kW).
+      # Ne pas utiliser une mesure de puissance apparente (VA) comme des watts.
+      # - type: power-sources-graph
+      #   title: Puissance de la maison
+      #   collection_key: energy_maison_plus
+  - title: Dehors
+    path: dehors
+    icon: mdi:weather-partly-cloudy
+    cards:
+      - type: custom:maison-plus-card
+        section: weather
+        # Facultatif si une seule entité weather.* existe dans Home Assistant.
+        # weather_entity: weather.votre_station
+        # forecast_type: daily
+  - title: Pièces
+    path: pieces
+    icon: mdi:home-thermometer
+    cards:
+      - type: custom:maison-plus-card
+        section: rooms
+        # Facultatif : masquer des pièces ou des capteurs précis.
+        # Utiliser les identifiants de pièces, pas leurs noms affichés.
+        # exclude_areas:
+        #   - identifiant_de_la_piece_exterieure
+        # exclude_entities:
+        #   - sensor.temperature_a_exclure
+        # Les températures de diagnostic (CPU, etc.) sont masquées par défaut.
+        # include_diagnostic: false

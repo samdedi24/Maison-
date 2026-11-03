@@ -1,3 +1,5 @@
+> **Référence historique de la démo web.** Ce document décrit `public/` et le serveur Node conservés comme archives. Pour la version native désormais visée, lire [homeassistant/README.md](../homeassistant/README.md) et [HOME_ASSISTANT.md](HOME_ASSISTANT.md). Ne pas poursuivre l’ancien adaptateur web sur cette base.
+
 # Référence de développement — Maison+
 
 Maison+ est la démo web validée d’une interface inspirée d’Apple Maison, destinée à être raccordée à Home Assistant. Le propriétaire utilise **Home Assistant Container sur QNAP**. Son équipement prévu comprend Philips Hue, des volets roulants et des appareils Zigbee. La liste réelle des entités, pièces et capteurs n’a pas encore été fournie.
